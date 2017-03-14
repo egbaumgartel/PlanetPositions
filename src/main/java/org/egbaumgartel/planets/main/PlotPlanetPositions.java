@@ -2,7 +2,7 @@ package org.egbaumgartel.planets.main;
 
 import java.util.stream.IntStream;
 
-import org.egbaumgartel.planets.celestial.Conversions;
+import org.egbaumgartel.planets.calcs.Conversions;
 
 /**
  * @author gregb

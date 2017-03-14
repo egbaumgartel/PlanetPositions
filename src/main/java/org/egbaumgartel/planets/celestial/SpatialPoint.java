@@ -9,6 +9,8 @@ package org.egbaumgartel.planets.celestial;
  * @date 2017-03-13
  * 
  * Immutable point object, must be constructed with values.
+ * 
+ * Looked at Spatial4j, but that seems tailored to surface mapping, not full 3D.
  *
  */
 public class SpatialPoint {
