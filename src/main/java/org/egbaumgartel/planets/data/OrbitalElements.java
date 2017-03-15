@@ -1,169 +1,346 @@
+/**
+ * 
+ */
 package org.egbaumgartel.planets.data;
 
 /**
  * @author gregb
  *
- * @date 2017-03-13
+ * @date 2017-03-14
  *
  */
-
-public enum OrbitalElements {
-/*	
- *  http://www.met.rdg.ac.uk/~ross/Astronomy/Planets.html
- *  (epoch = J2000 = 2000 January 1.5)
- *   a, m0, e, i, w, o
-*/	
-	MERCURY("Mercury",
-			0.38709893,
-			252.25084,
-			0.20563069,
-			7.00487,
-			77.45645,
-			48.33167
-			),
-	VENUS("Venus",
-			0.72333199,
-			181.97973,
-			0.00677323,
-			3.39471,
-			131.53298,
-			76.68069
-			),
-	EARTH("Earth",
-			1.00000011,
-			100.46435,
-			0.01671022,
-			0.00005,
-			102.94719,
-			-11.26064
-			),
-	MARS("Mars",
-			1.52366231,
-			355.45332,
-			0.09341233,
-			1.85061,
-			336.04084,
-			49.57854
-			),
-	JUPITER("Jupiter",
-			5.20336301,
-			34.40438,
-			0.04839266,
-			1.30530,
-			14.75385,
-			100.55615
-			),
-	SATURN("Saturn",
-			9.53707032,
-			49.94432,
-			0.05415060,
-			2.48446,
-			92.43194,
-			113.71504
-			),
-	URANUS("Uranus",
-			19.19126393,
-			313.23218,
-			0.04716771,
-			0.76986,
-			170.96424,
-			74.22988
-			),
-	NEPTUNE("Neptune",
-			30.06896348,
-			304.88003,
-			0.00858587,
-			1.76917,
-			44.97135,
-			131.72169
-			);
-	
-	// Display Name
-	private final String displayName;
-	// semi-major axis
+/**
+ * @author gregb
+ *
+ * @date 2017-03-15
+ *
+ */
+public class OrbitalElements {
+	private final String planetName;
+	//semi-major axis
 	private final double a;
-	// mean anomaly
-	private final double m0;
-	// Eccentricity
+	//eccentricity
 	private final double e;
-	// inclination (degrees)
+	//inclination
 	private final double i;
-	// argument of periapsis (degrees)
+	//mean longitude / anomaly
+	private final double L;
+	//longitude of periapsis
 	private final double w;
-	// longitude of ascending node (degrees)
-	private final double o;
-
-
+	//longitude of ascending node
+	private final double n;
+	
+	// deltas over time for the above
+	private final double d_a;
+	private final double d_e;
+	private final double d_i;
+	private final double d_L;
+	private final double d_w;
+	private final double d_n;
+	
+	// extra params for perturbations
+	private final double b;
+	private final double c;
+	private final double s;
+	private final double f;
 	
 	private OrbitalElements(
 			String name,
 			double a,
-			double m0,
 			double e,
 			double i,
+			double L,
 			double w,
-			double o)
-	{
-		this.displayName = name;
-		this.e = e;
+			double n,
+			double d_a,
+			double d_e,
+			double d_i,
+			double d_L,
+			double d_w,
+			double d_n,
+			double b,
+			double c,
+			double s,
+			double f) {
+		
+		this.planetName = name;
 		this.a = a;
+		this.e = e;
 		this.i = i;
-		this.o = o;
+		this.L = L;
 		this.w = w;
-		this.m0 = m0;
-	}
-	
-	public String getName() {
-		return this.displayName;
-	}
-	
-	// different names for same method, so that they can be referenced either way
-	
-	public double geta() {
-		return this.a;
-	}
-	
-	public double getSemiMajorAxis() {
-		return geta();
-	}
-	
-	public double getM0() {
-		return this.m0;
-	}
-	
-	public double getMeanAnomaly() {
-		return getM0();
-	}
-	
-	public double gete() {
-		return this.e;
+		this.n = n;
+		this.d_a = d_a;
+		this.d_e = d_e;
+		this.d_i = d_i;
+		this.d_L = d_L;
+		this.d_w = d_w;
+		this.d_n = d_n;
+		this.b = b;
+		this.c = c;
+		this.s = s;
+		this.f = f;
+		
 	}
 
-	public double getEccentricity() {
-		return gete();
+	public static class ElementBuilder {
+		private String planetName;
+		//semi-major axis
+		private double a;
+		//eccentricity
+		private double e;
+		//inclination
+		private double i;
+		//mean longitude / anomally
+		private double L;
+		//longitude of periapsis
+		private double w;
+		//longitude of ascending node
+		private double n;
+		
+		// deltas over time for the above
+		private double d_a;
+		private double d_e;
+		private double d_i;
+		private double d_L;
+		private double d_w;
+		private double d_n;
+		
+		// extra params for perturbations
+		private double b;
+		private double c;
+		private double s;
+		private double f;
+		
+		/*
+		 * Start with the name of object as required
+		 */
+		public ElementBuilder(String name) {
+			this.planetName = name;
+		}
+		
+		public ElementBuilder a(double a) {
+			this.a = a;
+			return this;
+		}
+		
+		public ElementBuilder e(double e) {
+			this.e = e;
+			return this;
+		}
+		
+		public ElementBuilder i(double i) {
+			this.i = i;
+			return this;
+		}
+		
+		public ElementBuilder L(double L) {
+			this.L = L;
+			return this;
+		}
+		
+		public ElementBuilder w(double w) {
+			this.w = w;
+			return this;
+		}
+		
+		public ElementBuilder n(double n) {
+			this.n = n;
+			return this;
+		}
+		
+		public ElementBuilder d_a(double d_a) {
+			this.d_a = d_a;
+			return this;
+		}
+		
+		public ElementBuilder d_e(double d_e) {
+			this.d_e = d_e;
+			return this;
+		}
+		
+		public ElementBuilder d_i(double d_i) {
+			this.d_i = d_i;
+			return this;
+		}
+		
+		public ElementBuilder d_L(double d_L) {
+			this.d_L = d_L;
+			return this;
+		}
+		
+		public ElementBuilder d_w(double d_w) {
+			this.d_w = d_w;
+			return this;
+		}
+		
+		public ElementBuilder d_n(double d_n) {
+			this.d_n = d_n;
+			return this;
+		}
+		
+		public ElementBuilder b(double b) {
+			this.b = b;
+			return this;
+		}
+		
+		public ElementBuilder c(double c) {
+			this.c = c;
+			return this;
+		}
+		
+		public ElementBuilder s(double s) {
+			this.s = s;
+			return this;
+		}
+		
+		public ElementBuilder f(double f) {
+			this.f = f;
+			return this;
+		}
+		
+		public OrbitalElements build() {
+			return new OrbitalElements(
+					planetName,
+					a,
+					e,
+					i,
+					L,
+					w,
+					n,
+					d_a,
+					d_e,
+					d_i,
+					d_L,
+					d_w,
+					d_n,
+					b,
+					c,
+					s,
+					f);
+		}
+		
 	}
 	
-	public double geti() {
-		return this.i;
+	/**
+	 * @return a - semi-major axis
+	 */
+	public double getA() {
+		return a;
+	}
+
+	/**
+	 * @return e - eccentricity
+	 */
+	public double getE() {
+		return e;
+	}
+
+	/**
+	 * @return i - inclination
+	 */
+	public double getI() {
+		return i;
+	}
+
+	/**
+	 * @return L - mean longitude / anomaly
+	 */
+	public double getL() {
+		return L;
+	}
+
+	/**
+	 * @return w - longitude of periapsis
+	 */
+	public double getW() {
+		return w;
+	}
+
+	/**
+	 * @return n - longitude of the ascending node
+	 */
+	public double getN() {
+		return n;
+	}
+
+	/**
+	 * @return delta-a
+	 */
+	public double getD_a() {
+		return d_a;
+	}
+
+	/**
+	 * @return delta-e
+	 */
+	public double getD_e() {
+		return d_e;
+	}
+
+	/**
+	 * @return delta-i
+	 */
+	public double getD_i() {
+		return d_i;
+	}
+
+	/**
+	 * @return delta-L
+	 */
+	public double getD_L() {
+		return d_L;
+	}
+
+	/**
+	 * @return delta-w
+	 */
+	public double getD_w() {
+		return d_w;
+	}
+
+	/**
+	 * @return delta-n
+	 */
+	public double getD_n() {
+		return d_n;
+	}
+
+	/**
+	 * @return 
+	 */
+	public double getB() {
+		return b;
+	}
+
+	/**
+	 * @return
+	 */
+	public double getC() {
+		return c;
+	}
+
+	/**
+	 * @return
+	 */
+	public double getS() {
+		return s;
+	}
+
+	/**
+	 * @return
+	 */
+	public double getF() {
+		return f;
+	}
+
+	/**
+	 * @return the planetName
+	 */
+	public String getPlanetName() {
+		return planetName;
 	}
 	
-	public double getInclination() {
-		return geti();
-	}
 	
-	public double geto() {
-		return this.o;
-	}
-	
-	public double getLongAscendingNode() {
-		return geto();
-	}
-	
-	public double getw() {
-		return this.w;
-	}
-	
-	public double getArgPeriapsis() {
-		return getw();
-	}
+
 }
