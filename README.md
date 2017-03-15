@@ -1,5 +1,4 @@
 # Description
-####################################
 
 This is a project for determining the 3D X, Y, Z positions of planets.
 This has probably been done elsewhere, and as such may just be an exercise
@@ -9,3 +8,8 @@ For now, this simply provides the X, Y and Z positions.  Graphical depictions
 could be added on top of it.
 
 Work in Progress.
+
+# Disclaimer
+
+I am neither a physicist or mathematician, just a software engineer with
+an interest in the topic.
